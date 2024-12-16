@@ -20,7 +20,7 @@ mkdir src
 cd src
 
 # Clone or pull the repositories
-clone_or_pull "https://github.com/emileSavoieCTA/Rocap.git" "rocap_ros"
+clone_or_pull "https://github.com/emileSavoieCTA/Rocap.git" "release/rocap" "rocap_ros"
 # clone_or_pull "https://github.com/cegepmontpetit/ROS2_CTA.git" "$ROS_DISTRO" "cta_gazebo_part"
 
 cd ${WORKSPACE}

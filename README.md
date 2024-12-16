@@ -19,13 +19,35 @@ For Docker installation instructions, follow one of the following links:
 - [Docker Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 
 ## Setup Repository
-Once Docker is installed, go to your IDE of choice and install the Docker extension. This will allow you to develop from within the container. Once setup, follow the following instructions to clone the repository.
 
-1. Open git bash and run the following command at the desired location
+Open the windows powershell and run the wollowing:
+```bash
+wsl
+```
 
+This will open up a wsl terminal from windows. From there, navigate to the docker directory of the Rocap repository. If you run the following command:
+```bash
+ls
 ```
-https://github.com/cegepmontpetit/22CTA034_ROS2_Package.git
+You should get this result
+
+```bash
+build.bash
+docker-compose.override.wsl.yml
+docker-compose.override.linux.yml
+docker-compose.yml
+docker-compose.override.windows.yml
+Dockerfile
 ```
+
+You can then run the following command to run the dedicated docker compose
+
+
+Open the given folder in VSCode and reopen the workspace in a dev container. Once built, execute the following command in a VSCode terminal
+```bash
+./build.bash
+```
+This will clone the repository and install all necessary dependecies
 
 # Usage
 Once in a working container, the code is now ready to be used.
