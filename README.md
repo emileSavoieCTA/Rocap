@@ -5,26 +5,57 @@
 - [Install Docker](#install-docker)
   - [Recommendations](#recommendations)
 
-# Introduction
-
-This page acts as a guide for setup and usage of the ROS package destined to the Rbot9 ROCAP
-
 # Initial Setup
 
 ## Docker Installation
 This repository is built with [Docker](https://docs.docker.com/?_gl=1*jirhkt*_gcl_aw*R0NMLjE3Mjk3MTE0OTEuRUFJYUlRb2JDaE1JMVB1ZHRwMmxpUU1WRFU3X0FSMDFfZzVPRUFBWUFTQUFFZ0tsOFBEX0J3RQ..*_gcl_au*MjEwMDM5OTQxNS4xNzI3MTExOTkz*_ga*MzI1MTgxNzg4LjE3MjcxMTA2OTA.*_ga_XJWPQMJYHQ*MTczNDAyOTUzOS4yMy4xLjE3MzQwMjk3ODUuNDcuMC4w). This allows the code to run on a Ubuntu 22.04 image with ROS2 Humble LTS and all necessary dependencies regardless of the user's operating system. 
 
-For Docker installation instructions, follow one of the following links:
+For Docker installation instructions, follow the following link:
 - [Docker Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
-- [Docker Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 
-## Setup Repository
-Make sure you have Docker Desktop open for all the steps that follow
 
-Open the windows powershell and run the wollowing:
+## Setup Repository in Visual Studio Code
+Once Docker installed, make sure the Docker Desktop application remains open for the remainder of the process. You may now open the source code in the VSCode IDE. When selecting the folder, make sure to select the folder where the .devcontainer folder is visible as illustraded in the image bellow. this will allow VSCode to repoen the workspace in a DevContainer
+
+<img src="images/folder_vscode.png" alt="Project Logo" width="500" />
+
+Once opened in VScode, make sure you have the following extensions installed:
+
+<img src="images/docker.png" alt="Project Logo" width="500" />
+<img src="images/dev_container.png" alt="Project Logo" width="500" />
+
+Your VSCode environment is now ready.
+
+## Setup WSL
+
+To access UI applications from a Dev Container from Windows, certain steps must be followed.
+
+Begin installing the Ubuntu application byt following the link: [Ubuntu installation](https://apps.microsoft.com/detail/9pdxgncfsczv?hl=en-US&gl=US)
+
+This will essentially allow to run a WLS terminal from Windows.Then, open a Command Prompt by typing:
+
 ```bash
-wsl
+Windows Key + "cmd:
 ```
+
+The following window should open:
+
+<img src="images/cmd.png" alt="Project Logo" width="1000" />
+
+Run the following line in the Command Prompt to verify that Ubuntu is correctly installed
+```bash
+wsl --list
+```
+The command should result in the following:
+
+<img src="images/wsl_list.png" alt="Project Logo" width="500" />
+
+If Ubuntu is not listed as default, run the following
+```bash
+wsl --set-default ubuntu
+wsl --shutdown
+```
+TODO: ADD INFO FOR UBUNTU NOT IN LIST
 
 This will open up a wsl terminal from windows. From there, navigate to the docker directory of the Rocap repository. If you run the following command:
 ```bash
