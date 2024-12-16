@@ -1,0 +1,139 @@
+<?xml version="1.0" ?>
+<robot name="rocap_base"  xmlns:xacro="http://www.ros.org/wiki/xacro" >
+ 
+  <xacro:macro name="anchor_module" 
+               params="name 
+                      fix_to 
+                      fix_to_rpy 
+                      fix_to_xyz
+                      pulley_xyz">
+
+    <xacro:property name="anchor_module_link" value="${name}" />
+    <xacro:property name="pulley_link" value="${name}_pulley" />
+    <xacro:property name="anchor_module_joint" value="${fix_to}_to_${anchor_module_link}" />
+    <xacro:property name="anchor_module_mesh_path" value="file://$(find rocap_ros)/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" />
+    <xacro:property name="pulley_joint" value="${anchor_module_link}_to_${anchor_module_link}" />
+
+    <link name="${anchor_module_link}">
+      <visual>
+        <geometry>
+            <mesh filename="${anchor_module_mesh_path}" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass value="0.0001"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <link name="${pulley_link}">
+      <inertial>
+        <mass value="0.0001"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="${anchor_module_joint}" type="revolute">
+        <origin rpy="${fix_to_rpy}" xyz="${fix_to_xyz}"/>
+        <parent link="${fix_to}"/>
+        <child link="${anchor_module_link}"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="30" velocity="6.0" lower="${-pi/2}" upper="${pi/2}" />
+        <dynamics damping="1.0" friction="0.0"/>
+    </joint>
+
+    <joint name="${pulley_joint}" type="fixed">
+        <origin rpy="0 0 0" xyz="${pulley_xyz}"/>
+        <parent link="${anchor_module_link}"/>
+        <child link="${pulley_link}"/>
+    </joint>
+
+  
+  <gazebo reference='${pulley_joint}'>
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  </xacro:macro>
+
+
+  <xacro:macro name="rocap_base" params="name height fix_to_link fix_to_link_rpy fix_to_link_xyz">
+
+    <xacro:property name="base_link" value="${name}_link" />
+    <xacro:property name="reflector_link" value="${name}_reflector_link" />
+    <xacro:property name="base_joint" value="${fix_to_link}_to_${base_link}" />
+    <xacro:property name="reflector_joint" value="${base_link}_to_${reflector_link}" />
+
+    <xacro:property name="ancor_module_left" value="${name}_ancor_module_left" />
+    <xacro:property name="ancor_module_center" value="${name}_ancor_module_center" />
+    <xacro:property name="ancor_module_right" value="${name}_ancor_module_right" />
+    
+    <xacro:property name="anchor_pulley_center_amf" value="0.12778 0 -0.22731" />
+    <xacro:property name="anchor_pulley_side_amf" value="0.31109 0 0.09019" />
+
+    
+    
+
+
+    <link name="${base_link}">
+        <inertial>
+            <mass value="40"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+        <visual>
+          <geometry>
+            <box size="0.2 0.2 ${height}"/>
+          </geometry>
+          <origin rpy="0 0 0" xyz="0 0 ${height/2}"/>
+        </visual>
+    </link>
+
+    <joint name="${base_joint}" type="fixed">
+            <origin rpy="${fix_to_link_rpy}" xyz="${fix_to_link_xyz}"/>
+            <parent link="${fix_to_link}"/>
+            <child link="${base_link}"/>
+    </joint>
+
+    <link name="${reflector_link}">
+      <inertial>
+            <mass value="0.0001"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <box size="0.01 0.40 0.40"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${-0.4/2}"/>
+      </visual>
+    </link>
+
+    <joint name="${reflector_joint}" type="fixed">
+            <origin rpy="0 0 ${pi/4}" xyz="0 0 3.70281"/>
+            <parent link="${base_link}"/>
+            <child link="${reflector_link}"/>
+    </joint>
+
+    <xacro:anchor_module name="${ancor_module_right}" 
+                      fix_to="${reflector_link}" 
+                      fix_to_xyz="0.13754 -0.07742 0.31060"
+                      fix_to_rpy="0 0 0"
+                      pulley_xyz="${anchor_pulley_side_amf}"
+                      />
+
+
+    <xacro:anchor_module name="${ancor_module_center}" 
+                      fix_to="${reflector_link}" 
+                      fix_to_xyz="0.03006 0.03006 0.31060"
+                      fix_to_rpy="0 0 0"
+                      pulley_xyz="${anchor_pulley_center_amf}"
+                      />
+
+    <xacro:anchor_module name="${ancor_module_left}" 
+                      fix_to="${reflector_link}" 
+                      fix_to_xyz="-0.07742 0.13754 0.31060"
+                      fix_to_rpy="0 0 0"
+                      pulley_xyz="${anchor_pulley_side_amf}"
+                      />
+    
+  </xacro:macro>
+
+</robot>

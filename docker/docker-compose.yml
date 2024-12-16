@@ -1,0 +1,29 @@
+name: ros2
+
+services:
+  rocap:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ROS_DISTRO: humble
+    # Networking and IPC for ROS 2
+    network_mode: host
+    ipc: host
+    # Needed to display graphical applications
+    privileged: true
+    # Interactive shell
+    stdin_open: true
+    tty: true
+    restart: always
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      - QT_QPA_PLATFORM=xcb
+      - QT_X11_NO_MITSHM=1
+    command: sleep infinity

@@ -1,0 +1,3 @@
+.vscode/*
+node/api_bridge/rocap-rest-api-client/*
+permissions/signed_permissions.json

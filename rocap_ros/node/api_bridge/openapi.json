@@ -1,0 +1,714 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "rocap-rest-api",
+    "description": "",
+    "license": {
+      "name": "Terms of service",
+      "url": "<TODO>"
+    },
+    "version": "v0.1"
+  },
+  "paths": {
+    "/api/v0/brakes/disengage": {
+      "post": {
+        "tags": [
+          "Brakes"
+        ],
+        "summary": "Disengage the brakes of the Rocap platform",
+        "description": "Disengage the brakes of the Rocap platform",
+        "operationId": "Disengage robot brakes",
+        "responses": {
+          "202": {
+            "description": "Disengage brakes request accepted. The Rocap brake will disengage shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The Rocap cannot currently disengage its brakes. This might be due to a currently active fault on the robot.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Rocap failed to process the disengage brake request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/brakes/engage": {
+      "post": {
+        "tags": [
+          "Brakes"
+        ],
+        "summary": "Engage the brakes",
+        "description": "Engage the brakes",
+        "operationId": "Engage the robot brakes",
+        "responses": {
+          "202": {
+            "description": "Engage brakes request accepted. The brakes will engage shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Rocap failed to process the engage brake request. Other means of immobilization should be triggered if available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/fault/clear": {
+      "post": {
+        "tags": [
+          "Faults"
+        ],
+        "summary": "Acknowledge and clear a fault.",
+        "description": "Acknowledge and clear a fault.",
+        "operationId": "Acknowledge and clear",
+        "requestBody": {
+          "description": "Allows to clear a fault by its id.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClearFaultRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The fault was cleared successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The fault could not be cleared. Most generally, this is because the targeted fault is still active.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Rocap failed to process the request. This is an internal error only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/fault/recovery_mode": {
+      "post": {
+        "tags": [
+          "Faults"
+        ],
+        "operationId": "Toggle recovery mode",
+        "requestBody": {
+          "description": "Allow to enter/exit recovery mode for a specific kind of fault.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FaultRecoveryModeChangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Recovery mode toggled. If the targeted fault was active, it will now be ignored for subsequent commands as long as the operation does not risk further service degradation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Recovery mode change refused. This principally occurs when the fault is not completely recovered, and thus exiting recovery mode would make the Robot enter the fault state immediately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Rocap failed to process the request. This is an internal error only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/move/linear": {
+      "post": {
+        "tags": [
+          "Displacement"
+        ],
+        "summary": "Perform an uniformly accelerated linear movement of the Rocap platform.",
+        "description": "Perform an uniformly accelerated linear movement of the Rocap platform.",
+        "operationId": "Linear move",
+        "requestBody": {
+          "description": "Pose information and velocity for the requested linear movement.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinearMoveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "The movement request is accepted. The displacement path will be generated and movement will begin afterwards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinearMoveResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized, the linear move request is outside the platform's workspace and cannot be performed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The rocap failed to process the movement request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/state": {
+      "get": {
+        "tags": [
+          "State"
+        ],
+        "summary": "Return the state of the Rocap as queried",
+        "description": "Return the state of the Rocap as queried",
+        "operationId": "State query",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Query parameters for the Rocap state",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/StateQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current state of the Rocap is gathered and inserted in the response body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The state query was rejected dur to insufficient permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "There was an error while gathering the content of the Rocap state query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/stop": {
+      "post": {
+        "tags": [
+          "Displacement"
+        ],
+        "summary": "Perform a controlled stop of the Rocap platform",
+        "description": "Perform a controlled stop of the Rocap platform",
+        "operationId": "Stop",
+        "responses": {
+          "202": {
+            "description": "The Stop request is accepted. A monitored deceleration will begin shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The rocap failed to process the stop request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/token/refresh": {
+      "post": {
+        "tags": [
+          "Access Token"
+        ],
+        "summary": "Refresh the provided valid API token.",
+        "description": "Refresh the provided valid API token.",
+        "operationId": "Refresh",
+        "responses": {
+          "200": {
+            "description": "A new refreshed token is emitted and enclosed in the response body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRefreshSuccess"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided token is invalid or otherwise malformed and cannot be refreshed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/token/request": {
+      "post": {
+        "tags": [
+          "Access Token"
+        ],
+        "summary": "Request a new API token based on the permissions of the provided access key.",
+        "description": "Request a new API token based on the permissions of the provided access key.",
+        "operationId": "Request",
+        "requestBody": {
+          "description": "Access key for the features of the Rocap platform. This key is provided by the Rocap team at Rbot9.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiV0AccessKey"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The access key is accepted and a new token is returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequestSuccess"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The access key is either invalid, or the request is malformed. A new token could not be provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v0/token/revoke": {
+      "delete": {
+        "tags": [
+          "Access Token"
+        ],
+        "summary": "Revoke the provided API token.",
+        "description": "Revoke the provided API token.",
+        "operationId": "Revoke",
+        "responses": {
+          "200": {
+            "description": "The provided token was revoked successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandAck"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided token is invalid or otherwise malformed and cannot be revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiV0AccessKey": {
+        "type": "object",
+        "description": "Signed permissions used to access various API functionalities",
+        "required": [
+          "signature",
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "API permissions"
+          },
+          "signature": {
+            "type": "string",
+            "description": "API permissions signature for validation"
+          }
+        }
+      },
+      "ClearFaultRequest": {
+        "type": "object",
+        "description": "User request to attempt to clear the specified fault.",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the fault to clear."
+          }
+        }
+      },
+      "CommandAck": {
+        "type": "object"
+      },
+      "Fault": {
+        "type": "object",
+        "description": "Description of a fault.\n\n# Note:\nFaults are not guaranteed to have the same id from one version to the next.\nand should be queried dynamically instead of using hardcoded ids.",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Fault Description"
+          },
+          "diagnostic": {
+            "type": "string",
+            "description": "Fault Diagnostic"
+          },
+          "id": {
+            "type": "string",
+            "description": "Fault Identifier"
+          }
+        }
+      },
+      "FaultMode": {
+        "type": "string",
+        "enum": [
+          "normal",
+          "recovery"
+        ]
+      },
+      "FaultRecoveryModeChangeRequest": {
+        "type": "object",
+        "required": [
+          "id",
+          "mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the fault which mode should be changed."
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FaultMode"
+          }
+        }
+      },
+      "GenericError": {
+        "type": "object",
+        "required": [
+          "cause"
+        ],
+        "properties": {
+          "cause": {
+            "type": "string",
+            "description": "Human readable summary of the error"
+          }
+        }
+      },
+      "LinearMoveRequest": {
+        "type": "object",
+        "description": "Movement request for the Rocap platform",
+        "required": [
+          "position"
+        ],
+        "properties": {
+          "clamp": {
+            "type": "boolean",
+            "description": "Clamp the requested movement to the Rocap current workspace to ensure\nthat the parameters are valid"
+          },
+          "orientation": {
+            "$ref": "#/components/schemas/Vec3"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Vec3"
+          },
+          "velocity": {
+            "type": "number",
+            "format": "double",
+            "description": "Requested movement velocity in meter per seconds"
+          }
+        }
+      },
+      "LinearMoveResponse": {
+        "type": "object",
+        "description": "Response for linear movement request",
+        "required": [
+          "position",
+          "orientation",
+          "velocity"
+        ],
+        "properties": {
+          "orientation": {
+            "$ref": "#/components/schemas/Vec3"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Vec3"
+          },
+          "velocity": {
+            "type": "number",
+            "format": "double",
+            "description": "Velocity used for the movement"
+          }
+        }
+      },
+      "RocapControlState": {
+        "type": "string",
+        "description": "Control state representation of the rocap",
+        "enum": [
+          "on-brakes",
+          "idle",
+          "moving"
+        ]
+      },
+      "StateQuery": {
+        "type": "object",
+        "description": "Representation of a query of the Rocap state",
+        "properties": {
+          "faults": {
+            "type": "boolean",
+            "description": "Get faults, if any, of the Rocap"
+          },
+          "orientation": {
+            "type": "boolean",
+            "description": "Get orientation, in degrees, of the Rocap center platform"
+          },
+          "position": {
+            "type": "boolean",
+            "description": "Get position, in meters, of the Rocap center platform"
+          },
+          "state": {
+            "type": "boolean",
+            "description": "Get current operating state of the Rocap"
+          }
+        }
+      },
+      "StateResponse": {
+        "type": "object",
+        "description": "State record of the Rocap",
+        "properties": {
+          "active-faults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fault"
+            },
+            "description": "Current faults, if any, of the Rocap"
+          },
+          "orientation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Vec3"
+              }
+            ],
+            "nullable": true
+          },
+          "position": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Vec3"
+              }
+            ],
+            "nullable": true
+          },
+          "silenced-faults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fault"
+            },
+            "description": "Faults that are currently silenced"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RocapControlState"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "TokenRefreshSuccess": {
+        "type": "object",
+        "description": "Response returned when a token request is accepted",
+        "required": [
+          "token",
+          "expiration"
+        ],
+        "properties": {
+          "expiration": {
+            "type": "string",
+            "description": "The expiration date of the token"
+          },
+          "token": {
+            "type": "string",
+            "description": "The newly generated Token"
+          }
+        }
+      },
+      "TokenRequestSuccess": {
+        "type": "object",
+        "description": "Response returned when a token request is accepted",
+        "required": [
+          "token",
+          "expiration"
+        ],
+        "properties": {
+          "expiration": {
+            "type": "string",
+            "description": "The expiration date of the token"
+          },
+          "token": {
+            "type": "string",
+            "description": "The newly generated Token"
+          }
+        }
+      },
+      "Vec3": {
+        "type": "object",
+        "description": "Struct that contains homogeneous 3D value",
+        "required": [
+          "x",
+          "y",
+          "z"
+        ],
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double",
+            "description": "X component"
+          },
+          "y": {
+            "type": "number",
+            "format": "double",
+            "description": "Y component"
+          },
+          "z": {
+            "type": "number",
+            "format": "double",
+            "description": "Z component"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<robot name="flying_rocap_body"  xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+  <!--get xacro argument-->
+  <xacro:arg name="with_rope" default="false" />
+
+  <!-- define all file property -->
+  <xacro:property name="package" value="rocap_ros" />
+  
+  <!-- define all file include -->
+
+  <xacro:include filename="$(find cta_gazebo_part)/part/movement/moving_base_6_axis/moving_base_6_axis.urdf.xacro" />
+  <xacro:include filename="$(find rocap_ros)/urdf/rocap_body/rocap_body.urdf.xacro"/>
+  <xacro:include filename="$(find rocap_ros)/urdf/rocap_base/rocap_base.urdf.xacro"/>
+
+  <!-- define model -->
+  <link name="world"></link>
+
+  <xacro:if value="$(arg with_rope)">
+    <xacro:rocap_body fixed_arm="False"/>
+  </xacro:if>
+  <xacro:unless value="$(arg with_rope)">
+    <xacro:rocap_body fixed_arm="True"/>
+  </xacro:unless>
+  
+  <xacro:moving_base_6_axis name="base" 
+                            fix_to_base="world" 
+                            fix_to_end="base_link"
+
+                            initial_position_lin_x="-2" 
+                            initial_position_lin_y="4.5" 
+                            initial_position_lin_z="2" 
+                            initial_position_rot_z="${3*pi/4}"
+                            
+                            lin_x_vel_kp="1000"
+                            lin_x_vel_ki="1"
+                            lin_x_vel_kd="0"
+
+                            lin_y_vel_kp="1000"
+                            lin_y_vel_ki="1"
+                            lin_y_vel_kd="0"
+
+                            lin_z_vel_kp="1000"
+                            lin_z_vel_ki="1000"
+                            lin_z_vel_kd="50"
+                            lin_z_vel_max_integral_error="100000"
+
+                            max_speed="0.5"
+                             />
+  
+  
+  
+  <xacro:rocap_base name="base_D" height="9" fix_to_link="world" fix_to_link_rpy="0 0 ${pi/2}" fix_to_link_xyz="6.5 0 0"/>
+  <xacro:rocap_base name="base_C" height="9" fix_to_link="world" fix_to_link_rpy="0 0 ${pi}" fix_to_link_xyz="6.5 9 0"/>
+  <xacro:rocap_base name="base_B" height="9" fix_to_link="world" fix_to_link_rpy="0 0 ${3*pi/2}" fix_to_link_xyz="-6.5 9 0"/>
+  <xacro:rocap_base name="base_A" height="9" fix_to_link="world" fix_to_link_rpy="0 0 0" fix_to_link_xyz="-6.5 0 0"/>
+  
+
+  <!-- define plugin -->
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <parameters>$(find rocap_ros)/config/controller_velocity.yaml</parameters>
+      <robot_param_node>sim_description</robot_param_node>
+    </plugin>
+  </gazebo>
+
+  <xacro:if value="$(arg with_rope)">
+    <xacro:macro name="fixe_rope" params="prefix_arm  
+                                          base_name 
+                                          base_link 
+                                          color=Gazebo/Black
+                                          pull_strength=10.0">
+
+      <gazebo>       
+        <plugin filename="libgazebo_rope.so" name="${prefix_arm}_long_arm_rope_plugin">
+          <name>${prefix_arm}_long_arm_rope</name>
+          <arm>${prefix_arm}_long_arm_pulley</arm>
+          <pulley>${base_name}_ancor_module_center_pulley</pulley>
+          <baselink>${base_link}</baselink>
+          <color>Gazebo/Black</color>
+          <pull_strength>${pull_strength}</pull_strength>
+        </plugin>
+
+        <plugin filename="libgazebo_rope.so" name="${prefix_arm}_short_arm_1_rope_plugin">
+          <name>${prefix_arm}_short_arm_1_rope</name>
+          <arm>${prefix_arm}_short_arm_1_pulley</arm>
+          <pulley>${base_name}_ancor_module_right_pulley</pulley>
+          <baselink>${base_link}</baselink>
+          <color>Gazebo/Black</color>
+          <pull_strength>${pull_strength}</pull_strength>
+        </plugin>
+
+        <plugin filename="libgazebo_rope.so" name="${prefix_arm}_short_arm_2_rope_plugin">
+          <name>${prefix_arm}_short_arm_2_rope</name>
+          <arm>${prefix_arm}_short_arm_2_pulley</arm>
+          <pulley>${base_name}_ancor_module_left_pulley</pulley>
+          <baselink>${base_link}</baselink>
+          <color>Gazebo/Black</color>
+          <pull_strength>${pull_strength}</pull_strength>
+        </plugin>
+
+    </gazebo>
+
+    </xacro:macro>
+                                                                                
+    <xacro:fixe_rope prefix_arm="front" base_name="base_B" base_link="lin_x_lin"/>
+    <xacro:fixe_rope prefix_arm="left" base_name="base_A" base_link="lin_x_lin"/>
+    <xacro:fixe_rope prefix_arm="back" base_name="base_D" base_link="lin_x_lin"/>
+    <xacro:fixe_rope prefix_arm="right" base_name="base_C" base_link="lin_x_lin"/>
+  </xacro:if>
+
+</robot>

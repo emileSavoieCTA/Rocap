@@ -1,0 +1,14 @@
+services:
+  rocap:
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth
+    environment:
+      - DISPLAY=:1 # Passthrough host DISPLAY
+      - WAYLAND_DISPLAY # Passthrough host WAYLAND_DISPLAY
+      - XDG_RUNTIME_DIR=/run/user/1001
+      - PULSE_SERVER # Passthrough host PULSE_SERVER
+      - XAUTHORITY=/tmp/.docker.xauth
+
+
+      

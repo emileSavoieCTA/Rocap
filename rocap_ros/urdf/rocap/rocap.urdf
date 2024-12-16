@@ -1,0 +1,717 @@
+<?xml version="1.0" ?>
+<robot name="rocap">
+	<link name="base_link">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/RoCaP_centre_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="40"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.4 0.4 0.45"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0.23"/>
+		</collision>
+	</link>
+	<link name="front_rotation_link"/>
+	<joint name="base_link_to_front_rotation_link" type="fixed">
+		<origin rpy="0 0 0.0" xyz="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="front_rotation_link"/>
+	</joint>
+	<link name="front_long_arm_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.35 0.05 0.30"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.175 0 -0.10"/>
+		</collision>
+	</link>
+	<link name="front_long_arm_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+	</link>
+	<joint name="front_rotation_link_to_front_long_arm_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz="0.24235 0 0.26235"/>
+		<parent link="front_rotation_link"/>
+		<child link="front_long_arm_arm"/>
+	</joint>
+	<joint name="front_long_arm_arm_to_front_long_arm_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.27838 0 -0.16261"/>
+		<parent link="front_long_arm_arm"/>
+		<child link="front_long_arm_pulley"/>
+	</joint>
+	<gazebo reference="front_long_arm_arm_to_front_long_arm_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="front_short_arm_1_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="front_short_arm_1_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="front_rotation_link_to_front_short_arm_1_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 0.1520 0.39298"/>
+		<parent link="front_rotation_link"/>
+		<child link="front_short_arm_1_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="front_short_arm_1_arm_to_front_short_arm_1_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="front_short_arm_1_arm"/>
+		<child link="front_short_arm_1_pulley"/>
+	</joint>
+	<gazebo reference="front_short_arm_1_arm_to_front_short_arm_1_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="front_short_arm_2_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="front_short_arm_2_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="front_rotation_link_to_front_short_arm_2_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 -0.1520 0.39298"/>
+		<parent link="front_rotation_link"/>
+		<child link="front_short_arm_2_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="front_short_arm_2_arm_to_front_short_arm_2_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="front_short_arm_2_arm"/>
+		<child link="front_short_arm_2_pulley"/>
+	</joint>
+	<gazebo reference="front_short_arm_2_arm_to_front_short_arm_2_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="left_rotation_link"/>
+	<joint name="base_link_to_left_rotation_link" type="fixed">
+		<origin rpy="0 0 1.5707963267948966" xyz="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="left_rotation_link"/>
+	</joint>
+	<link name="left_long_arm_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.35 0.05 0.30"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.175 0 -0.10"/>
+		</collision>
+	</link>
+	<link name="left_long_arm_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+	</link>
+	<joint name="left_rotation_link_to_left_long_arm_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz="0.24235 0 0.26235"/>
+		<parent link="left_rotation_link"/>
+		<child link="left_long_arm_arm"/>
+	</joint>
+	<joint name="left_long_arm_arm_to_left_long_arm_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.27838 0 -0.16261"/>
+		<parent link="left_long_arm_arm"/>
+		<child link="left_long_arm_pulley"/>
+	</joint>
+	<gazebo reference="left_long_arm_arm_to_left_long_arm_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="left_short_arm_1_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="left_short_arm_1_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="left_rotation_link_to_left_short_arm_1_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 0.1520 0.39298"/>
+		<parent link="left_rotation_link"/>
+		<child link="left_short_arm_1_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="left_short_arm_1_arm_to_left_short_arm_1_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="left_short_arm_1_arm"/>
+		<child link="left_short_arm_1_pulley"/>
+	</joint>
+	<gazebo reference="left_short_arm_1_arm_to_left_short_arm_1_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="left_short_arm_2_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="left_short_arm_2_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="left_rotation_link_to_left_short_arm_2_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 -0.1520 0.39298"/>
+		<parent link="left_rotation_link"/>
+		<child link="left_short_arm_2_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="left_short_arm_2_arm_to_left_short_arm_2_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="left_short_arm_2_arm"/>
+		<child link="left_short_arm_2_pulley"/>
+	</joint>
+	<gazebo reference="left_short_arm_2_arm_to_left_short_arm_2_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="back_rotation_link"/>
+	<joint name="base_link_to_back_rotation_link" type="fixed">
+		<origin rpy="0 0 3.141592653589793" xyz="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="back_rotation_link"/>
+	</joint>
+	<link name="back_long_arm_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.35 0.05 0.30"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.175 0 -0.10"/>
+		</collision>
+	</link>
+	<link name="back_long_arm_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+	</link>
+	<joint name="back_rotation_link_to_back_long_arm_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz="0.24235 0 0.26235"/>
+		<parent link="back_rotation_link"/>
+		<child link="back_long_arm_arm"/>
+	</joint>
+	<joint name="back_long_arm_arm_to_back_long_arm_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.27838 0 -0.16261"/>
+		<parent link="back_long_arm_arm"/>
+		<child link="back_long_arm_pulley"/>
+	</joint>
+	<gazebo reference="back_long_arm_arm_to_back_long_arm_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="back_short_arm_1_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="back_short_arm_1_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="back_rotation_link_to_back_short_arm_1_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 0.1520 0.39298"/>
+		<parent link="back_rotation_link"/>
+		<child link="back_short_arm_1_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="back_short_arm_1_arm_to_back_short_arm_1_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="back_short_arm_1_arm"/>
+		<child link="back_short_arm_1_pulley"/>
+	</joint>
+	<gazebo reference="back_short_arm_1_arm_to_back_short_arm_1_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="back_short_arm_2_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="back_short_arm_2_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="back_rotation_link_to_back_short_arm_2_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 -0.1520 0.39298"/>
+		<parent link="back_rotation_link"/>
+		<child link="back_short_arm_2_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="back_short_arm_2_arm_to_back_short_arm_2_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="back_short_arm_2_arm"/>
+		<child link="back_short_arm_2_pulley"/>
+	</joint>
+	<gazebo reference="back_short_arm_2_arm_to_back_short_arm_2_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="right_rotation_link"/>
+	<joint name="base_link_to_right_rotation_link" type="fixed">
+		<origin rpy="0 0 4.71238898038469" xyz="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="right_rotation_link"/>
+	</joint>
+	<link name="right_long_arm_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.35 0.05 0.30"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.175 0 -0.10"/>
+		</collision>
+	</link>
+	<link name="right_long_arm_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+	</link>
+	<joint name="right_rotation_link_to_right_long_arm_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz="0.24235 0 0.26235"/>
+		<parent link="right_rotation_link"/>
+		<child link="right_long_arm_arm"/>
+	</joint>
+	<joint name="right_long_arm_arm_to_right_long_arm_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.27838 0 -0.16261"/>
+		<parent link="right_long_arm_arm"/>
+		<child link="right_long_arm_pulley"/>
+	</joint>
+	<gazebo reference="right_long_arm_arm_to_right_long_arm_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="right_short_arm_1_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="right_short_arm_1_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="right_rotation_link_to_right_short_arm_1_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 0.1520 0.39298"/>
+		<parent link="right_rotation_link"/>
+		<child link="right_short_arm_1_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="right_short_arm_1_arm_to_right_short_arm_1_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="right_short_arm_1_arm"/>
+		<child link="right_short_arm_1_pulley"/>
+	</joint>
+	<gazebo reference="right_short_arm_1_arm_to_right_short_arm_1_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="right_short_arm_2_arm">
+		<visual>
+			<geometry>
+				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.16 0.05 0.20"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.08 0 -0.05"/>
+		</collision>
+	</link>
+	<link name="right_short_arm_2_pulley">
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+		</inertial>
+	</link>
+	<joint name="right_rotation_link_to_right_short_arm_2_arm" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin rpy="0 0 0" xyz=" 0.24235 -0.1520 0.39298"/>
+		<parent link="right_rotation_link"/>
+		<child link="right_short_arm_2_arm"/>
+		<limit effort="30" lower="-1.5707963267948966" upper="1.5707963267948966" velocity="6.0"/>
+		<dynamics damping="1.0" friction="0.0"/>
+	</joint>
+	<joint name="right_short_arm_2_arm_to_right_short_arm_2_pulley" type="fixed">
+		<origin rpy="0 0 0" xyz="0.09507 0 0.02424"/>
+		<parent link="right_short_arm_2_arm"/>
+		<child link="right_short_arm_2_pulley"/>
+	</joint>
+	<gazebo reference="right_short_arm_2_arm_to_right_short_arm_2_pulley">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="lidar_base_link">
+		<visual>
+			<!-- set defaut visual to velodyne puck -->
+			<geometry>
+				<cylinder length="0.072" radius="0.09"/>
+				<axis xyz="0 0 1"/>
+			</geometry>
+			<origin xyz="0 0 0.036"/>
+		</visual>
+	</link>
+	<link name="velodyne"/>
+	<joint name="base_link_to_lidar_base_link" type="fixed">
+		<origin rpy="3.141592653589793 0 0" xyz="-.15 -0.150 0"/>
+		<parent link="base_link"/>
+		<child link="lidar_base_link"/>
+	</joint>
+	<joint name="lidar_base_link_to_velodyne" type="fixed">
+		<origin rpy="0 0 0" xyz="0 0 0.037"/>
+		<parent link="lidar_base_link"/>
+		<child link="velodyne"/>
+	</joint>
+	<gazebo reference="velodyne">
+		<sensor name="sensor_ray" type="gpu_ray">
+			<pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+			<ray>
+				<scan>
+					<horizontal>
+						<samples>800</samples>
+						<resolution>1.0</resolution>
+						<min_angle>0</min_angle>
+						<max_angle>6.283185307179586</max_angle>
+					</horizontal>
+					<vertical>
+						<samples>16</samples>
+						<resolution>1.0</resolution>
+						<min_angle>-0.261799</min_angle>
+						<max_angle>0.261799</max_angle>
+					</vertical>
+				</scan>
+				<range>
+					<min>0.1</min>
+					<max>100.0</max>
+				</range>
+			</ray>
+			<!-- <always_on>true</always_on> -->
+			<update_rate>10.0</update_rate>
+			<!-- Setup ros plugin -->
+			<plugin filename="libgazebo_ros_ray_sensor.so" name="lidar_plugin">
+				<gaussian_noise>0</gaussian_noise>
+				<alwaysOn>true</alwaysOn>
+				<!-- <update_rate>10.0</update_rate> -->
+				<ros>
+					<!-- Configure namespace and remap to publish -->
+					<namespace>/ray</namespace>
+					<remapping>~/out:=points</remapping>
+				</ros>
+				<output_type>sensor_msgs/PointCloud2</output_type>
+				<!-- <output_type>sensor_msgs/LaserScan</output_type> -->
+				<frame_name>velodyne</frame_name>
+			</plugin>
+		</sensor>
+	</gazebo>
+	<!--    define link  -->
+	<link name="IMU_link">
+		<inertial>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<mass value="0.00035"/>
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+		</inertial>
+	</link>
+	<joint name="IMU_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="IMU_link"/>
+		<origin rpy="0 0 0" xyz="0 0 0"/>
+		<axis xyz="1 0 0"/>
+	</joint>
+	<gazebo reference="IMU_joint">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<gazebo reference="IMU_link">
+		<sensor name="IMU" type="imu">
+			<always_on>true</always_on>
+			<update_rate>50</update_rate>
+			<imu>
+				<angular_velocity>
+					<x>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>0.0002</stddev>
+						</noise>
+					</x>
+					<y>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>0.0002</stddev>
+						</noise>
+					</y>
+					<z>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>0.0002</stddev>
+						</noise>
+					</z>
+				</angular_velocity>
+				<linear_acceleration>
+					<x>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>0.017</stddev>
+						</noise>
+					</x>
+					<y>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>0.017</stddev>
+						</noise>
+					</y>
+					<z>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>0.017</stddev>
+						</noise>
+					</z>
+				</linear_acceleration>
+			</imu>
+			<plugin filename="libgazebo_ros_imu_sensor.so" name="bytes_imu">
+				<ros>
+					<namespace>imu</namespace>
+					<remapping>~/out:=data_raw</remapping>
+				</ros>
+				<initial_orientation_as_reference>false</initial_orientation_as_reference>
+			</plugin>
+		</sensor>
+	</gazebo>
+	<link name="cam_link">
+		<visual>
+			<geometry>
+				<box size="0.025 0.025 0.025"/>
+			</geometry>
+		</visual>
+		<inertial>
+			<origin rpy="0 0 0" xyz="0 0.069 -0.047"/>
+			<mass value="0.0001"/>
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+		</inertial>
+	</link>
+	<gazebo reference="cam_link">
+		<material>Gazebo/Black</material>
+	</gazebo>
+	<joint name="cam_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="cam_link"/>
+		<origin rpy="0 0 0" xyz="0.15 0 0.5"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+	<gazebo reference="cam_joint">
+		<preserveFixedJoint>true</preserveFixedJoint>
+		<material>Gazebo/Black</material>
+	</gazebo>
+	<link name="cam_rgb_optical_frame">
+		<inertial>
+			<origin rpy="0 0 0" xyz="0 0.069 -0.047"/>
+			<mass value="0.035"/>
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+		</inertial>
+	</link>
+	<joint name="cam_rgb_optical_joint" type="fixed">
+		<parent link="cam_link"/>
+		<child link="cam_rgb_optical_frame"/>
+		<origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+	<gazebo reference="cam_rgb_optical_joint">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<!-- camera -->
+	<gazebo reference="cam_link">
+		<sensor name="cam" type="depth">
+			<!--<frameName>${name}_rgb_optical_frame</frameName>-->
+			<always_on>true</always_on>
+			<visualize>true</visualize>
+			<update_rate>30</update_rate>
+			<camera name="intel_realsense_r200">
+				<horizontal_fov>1.02974</horizontal_fov>
+				<image>
+					<width>640</width>
+					<height>480</height>
+					<format>R8G8B8</format>
+				</image>
+				<clip>
+					<near>0.05</near>
+					<far>50</far>
+				</clip>
+				<noise>
+					<type>gaussian</type>
+					<!-- Noise is sampled independently per pixel on each frame.
+                            That pixel's noise value is added to each of its color
+                            channels, which at that point lie in the range [0,1]. -->
+					<mean>0.0</mean>
+					<stddev>0.007</stddev>
+				</noise>
+			</camera>
+			<plugin filename="libgazebo_ros_camera.so" name="camera_driver">
+				<camera_name>cam</camera_name>
+				<frame_name>cam_rgb_optical_frame</frame_name>
+				<ros>
+					<namespace></namespace>
+					<!-- <remapping>image_raw:=image_demo</remapping> -->
+					<!-- <remapping>camera_info:=camera_info_demo</remapping> -->
+				</ros>
+			</plugin>
+		</sensor>
+	</gazebo>
+</robot>

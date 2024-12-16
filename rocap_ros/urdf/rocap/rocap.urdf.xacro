@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<robot name="rocap"  xmlns:xacro="http://www.ros.org/wiki/xacro" >
+  
+  <xacro:include filename="$(find rocap_ros)/urdf/rocap_body/rocap_body.urdf.xacro" />
+  <xacro:rocap_body fixed_arm="True"/> 
+</robot>

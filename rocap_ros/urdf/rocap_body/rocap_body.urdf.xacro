@@ -1,0 +1,199 @@
+<?xml version="1.0" ?>
+<robot name="rocap_body"  xmlns:xacro="http://www.ros.org/wiki/xacro" >
+ 
+  <xacro:macro name="rocap_body" params="fixed_arm=${True}">
+
+    
+    <xacro:property name="package" value="rocap_ros" />
+    <xacro:property name="body_mesh_path" value="file://$(find ${package})/urdf/rocap_body/mesh/RoCaP_centre_simple.stl" />
+    <xacro:property name="short_arm_mesh_path" value="file://$(find ${package})/urdf/rocap_body/mesh/Bras_court_simple.stl" />
+    <xacro:property name="long_arm_mesh_path" value="file://$(find ${package})/urdf/rocap_body/mesh/Bras_long_simple.stl" />
+    
+    <link name="base_link">
+        <visual>
+          <geometry>
+            <mesh filename="${body_mesh_path}" scale="0.001 0.001 0.001"/>
+          </geometry>
+        </visual>
+        <inertial>
+            <mass value="40"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+        <collision>
+          <geometry>
+            <box size="0.4 0.4 0.45"/> 
+          </geometry>
+          <origin rpy="0 0 0" xyz="0 0 0.23"/>
+        </collision>
+    </link>
+
+    <xacro:macro name="long_arm" params="name 
+                                        fix_to_link
+                                        fix_to_link_rpy 
+                                        fix_to_link_xyz
+                                        fixed_arm=${True}">
+      
+      <xacro:property name="long_arm_link" value="${name}_arm" />
+      <xacro:property name="pulley_link" value="${name}_pulley" />
+      <xacro:property name="arm_joint" value="${fix_to_link}_to_${long_arm_link}" />
+      <xacro:property name="pulley_joint" value="${long_arm_link}_to_${pulley_link}" />
+
+      <xacro:property name="PulleyDistXYZ" value="0.27838 0 -0.16261" />
+
+      <link name="${long_arm_link}">
+        <visual>
+          <geometry>
+            <mesh filename="${long_arm_mesh_path}" scale="0.001 0.001 0.001"/>
+          </geometry>
+        </visual>
+        <inertial>
+            <mass value="0.001"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+        <collision>
+          <geometry>
+            <box size="0.35 0.05 0.30"/> 
+          </geometry>
+          <origin rpy="0 0 0" xyz="${0.35/2} 0 -0.10"/>
+        </collision>
+      </link>
+
+      <link name="${pulley_link}">
+        <inertial>
+            <mass value="0.001"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+      </link>
+
+      <xacro:if value="${str(fixed_arm).lower() != 'true'}">
+        <joint name="${arm_joint}" type="revolute">
+          <axis xyz="0 0 1"/>
+          <origin rpy="${fix_to_link_rpy}" xyz="${fix_to_link_xyz}"/>
+          <parent link="${fix_to_link}"/>
+          <child link="${long_arm_link}"/>
+          <limit effort="30" velocity="6.0" lower="${-pi/2}" upper="${pi/2}" />
+          <dynamics damping="1.0" friction="0.0"/>
+        </joint>
+      </xacro:if>
+      <xacro:unless value="${str(fixed_arm).lower() != 'true'}">
+        <joint name="${arm_joint}" type="fixed">
+          <axis xyz="0 0 1"/>
+          <origin rpy="${fix_to_link_rpy}" xyz="${fix_to_link_xyz}"/>
+          <parent link="${fix_to_link}"/>
+          <child link="${long_arm_link}"/>
+        </joint>
+      </xacro:unless>
+
+      <joint name="${pulley_joint}" type="fixed">
+            <origin rpy="0 0 0" xyz="${PulleyDistXYZ}"/>
+            <parent link="${long_arm_link}"/>
+            <child link="${pulley_link}"/>
+      </joint>
+    
+      <gazebo reference='${pulley_joint}'>
+        <preserveFixedJoint>true</preserveFixedJoint>
+      </gazebo>
+
+    </xacro:macro>
+  
+ 
+
+    <xacro:macro name="short_arm" params="name fix_to_link fix_to_link_rpy fix_to_link_xyz">
+      
+      <xacro:property name="short_arm_link" value="${name}_arm" />
+      <xacro:property name="pulley_link" value="${name}_pulley" />
+      <xacro:property name="joint_name" value="${fix_to_link}_to_${short_arm_link}" />
+      <xacro:property name="pulley_joint" value="${short_arm_link}_to_${pulley_link}" />
+
+      <xacro:property name="PulleyDistXYZ" value="0.09507 0 0.02424" />
+
+      <link name="${short_arm_link}">
+        <visual>
+          <geometry>
+            <mesh filename="${short_arm_mesh_path}" scale="0.001 0.001 0.001"/>
+          </geometry>
+        </visual>
+        <inertial>
+            <mass value="0.001"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+        <collision>
+          <geometry>
+            <box size="0.16 0.05 0.20"/> 
+          </geometry>
+          <origin rpy="0 0 0" xyz="${0.16/2} 0 -0.05"/>
+        </collision>
+      </link>
+
+      <link name="${pulley_link}">
+        <inertial>
+            <mass value="0.001"/>
+            <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+        </inertial>
+      </link>
+
+      <joint name="${joint_name}" type="fixed">
+              <axis xyz="0 0 1"/>
+              <origin rpy="${fix_to_link_rpy}" xyz="${fix_to_link_xyz}"/>
+              <parent link="${fix_to_link}"/>
+              <child link="${short_arm_link}"/>
+              <limit effort="30" velocity="6.0" lower="${-pi/2}" upper="${pi/2}" />
+              <dynamics damping="1.0" friction="0.0"/>
+      </joint>
+
+      <joint name="${pulley_joint}" type="fixed">
+            <origin rpy="0 0 0" xyz="${PulleyDistXYZ}"/>
+            <parent link="${short_arm_link}"/>
+            <child link="${pulley_link}"/>
+      </joint>
+
+    <gazebo reference='${pulley_joint}'>
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+    </xacro:macro>
+
+
+    <xacro:macro name="all_side_arm" params="name fix_to_link angleZ fixed_arm=${True}">
+      
+      <xacro:property name="rotation_link" value="${name}_rotation_link" />
+      <xacro:property name="joint_name" value="${fix_to_link}_to_${rotation_link}" />
+
+      <link name="${rotation_link}"></link>
+
+      <joint name="${joint_name}" type="fixed">
+              <origin rpy="0 0 ${angleZ}" xyz="0 0 0"/>
+              <parent link="${fix_to_link}"/>
+              <child link="${rotation_link}"/>
+      </joint>
+
+      <xacro:long_arm name="${name}_long_arm" 
+                      fix_to_link="${rotation_link}" 
+                      fix_to_link_rpy="0 0 0" 
+                      fix_to_link_xyz="0.24235 0 0.26235" 
+                      fixed_arm="${fixed_arm}"/>
+
+      <xacro:short_arm name="${name}_short_arm_1" fix_to_link="${rotation_link}" fix_to_link_rpy="0 0 0" fix_to_link_xyz=" 0.24235 0.1520 0.39298"/>
+      <xacro:short_arm name="${name}_short_arm_2" fix_to_link="${rotation_link}" fix_to_link_rpy="0 0 0" fix_to_link_xyz=" 0.24235 -0.1520 0.39298"/>  
+
+    </xacro:macro>
+
+    
+    <xacro:all_side_arm name="front" fix_to_link="base_link" angleZ="${pi/2*0}" fixed_arm="${fixed_arm}" />
+    <xacro:all_side_arm name="left" fix_to_link="base_link" angleZ="${pi/2*1} " fixed_arm="${fixed_arm}" />
+    <xacro:all_side_arm name="back" fix_to_link="base_link" angleZ="${pi/2*2}" fixed_arm="${fixed_arm}" />
+    <xacro:all_side_arm name="right" fix_to_link="base_link" angleZ="${pi/2*3}" fixed_arm="${fixed_arm}" />
+
+    <!-- add sensor -->
+    <xacro:include filename="$(find cta_gazebo_part)/part/movement/moving_base_6_axis/moving_base_6_axis.urdf.xacro" />
+    <xacro:include filename="$(find cta_gazebo_part)/part/lidar/velodyme_puck/velodyme_puck.urdf.xacro" />
+    <xacro:include filename="$(find cta_gazebo_part)/part/IMU/IMU.urdf.xacro" />
+    <xacro:include filename="$(find cta_gazebo_part)/part/camera/cameraDepth/cameraDepth.urdf.xacro" />
+  
+    <xacro:velodyme_puck namespace="/ray" fixTo="base_link" fixToBaseXYZ="-.15 -0.150 0" fixToBaseRPY="${pi} 0 0"/>
+    <xacro:IMU name="IMU" fix_to="base_link" xyz="0 0 0" rpy="0 0 0"/>
+    <xacro:CameraDepth name="cam" namespace="" fix_to="base_link" xyz="0.15 0 0.5" rpy="0 0 0"/>
+
+  </xacro:macro>
+
+</robot>

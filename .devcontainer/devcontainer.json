@@ -1,0 +1,30 @@
+{
+	"name": "Rocap V5",
+
+	"dockerComposeFile": [
+		"../docker/docker-compose.yml",
+		// "../docker/docker-compose.override.windows.yml"
+		"../docker/docker-compose.override.linux.yml"
+	],
+	"service": "rocap",
+	"workspaceFolder": "/home/rocap_ws",
+	"features": {
+		// "ghcr.io/devcontainers/features/nvidia-cuda:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/python:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.shell.linux": "/bin/bash"
+			},
+			"extensions": [
+				"ms-iot.vscode-ros",
+				"ms-vscode.cpptools",
+				"ms-python.python",
+				"ms-vscode.cmake-tools",
+				"charliermarsh.ruff"
+			]
+		}
+	}
+}
