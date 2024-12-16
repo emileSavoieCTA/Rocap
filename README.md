@@ -19,6 +19,7 @@ For Docker installation instructions, follow one of the following links:
 - [Docker Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 
 ## Setup Repository
+Make sure you have Docker Desktop open for all the steps that follow
 
 Open the windows powershell and run the wollowing:
 ```bash
@@ -40,10 +41,13 @@ docker-compose.override.windows.yml
 Dockerfile
 ```
 
-You can then run the following command to run the dedicated docker compose
+You can then run the following command to run the dedicated docker compose:
 
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.wsl.yml up
+```
 
-Open the given folder in VSCode and reopen the workspace in a dev container. Once built, execute the following command in a VSCode terminal
+You can then open then open the workspace folder in VSCode and reopen the workspace in a dev container. Once built, execute the following command in a VSCode terminal
 ```bash
 ./build.bash
 ```
