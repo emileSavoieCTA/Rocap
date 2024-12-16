@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<robot name="translation_axis"  xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<xacro:property name="nullPose" value="0 0 0" />
+<xacro:macro name="translation_axis" 
+               params="name
+                      axis  
+                      fix_to 
+                      rpy=${nullPose} 
+                      xyz=${nullPose} 
+                      initial_position=0
+                      max_movement_speed=2
+                      control_joint_name=${None}
+                      vel_kp=100
+                      vel_ki=1000
+                      vel_kd=2
+                      vel_max_integral_error=10000
+                      pos_kp=1000
+                      pos_ki=10
+                      pos_kd=500
+                      pos_max_integral_error=10000
+                      ">
+
+    <xacro:property name="slide_link" value="${name}_lin" />
+
+
+    <xacro:if value="${control_joint_name != None}">
+
+      <xacro:property name="sliding_join" value="${control_joint_name}" />
+    
+    </xacro:if>
+    <xacro:unless value="${control_joint_name != None}">
+
+       <xacro:property name="sliding_join" value="${fix_to}_to_${slide_link}" />
+
+    </xacro:unless>
+    
+    <link name="${slide_link}">
+     <inertial>
+          <mass value="0.001"/>
+          <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+    </link>
+  
+    <joint name="${sliding_join}" type="prismatic">
+      <axis xyz="${axis}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <parent link="${fix_to}"/>
+      <child link="${slide_link}"/>
+      <limit effort="1000" lower="-10000" upper="10000" velocity="${max_movement_speed}"/>
+      <dynamics damping="1.0" friction="0.0"/>
+    </joint>
+  
+    <gazebo reference='${sliding_join}'>
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+    <!-- define control interface -->
+    <ros2_control name="${name}_GazeboSystem" type="system">
+    
+      <hardware>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </hardware>
+      
+      <joint name="${sliding_join}">
+        
+        <param name="vel_kp">${vel_kp}</param>
+        <param name="vel_ki">${vel_ki}</param>
+        <param name="vel_kd">${vel_kd}</param>
+        <param name="vel_max_integral_error">${vel_max_integral_error}</param>
+
+        <param name="pos_kp">${pos_kp}</param>
+        <param name="pos_ki">${pos_ki}</param>
+        <param name="pos_kd">${pos_kd}</param>
+        <param name="pos_max_integral_error">${pos_max_integral_error}</param>
+
+
+        <!-- define command interface -->
+        <command_interface name="velocity_pid"></command_interface>
+
+        <command_interface name="position_pid"></command_interface>
+
+        <!-- define state interface -->
+        <state_interface name="position">
+          <param name="initial_value">${initial_position}</param>
+        </state_interface>
+
+        <state_interface name="velocity">
+          <param name="initial_value">0</param>
+        </state_interface>
+
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+
+      </joint>
+
+    </ros2_control>
+
+
+  </xacro:macro>
+
+</robot>

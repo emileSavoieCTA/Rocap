@@ -9,7 +9,7 @@
   
   <!-- define all file include -->
 
-  <xacro:include filename="$(find cta_gazebo_part)/part/movement/moving_base_6_axis/moving_base_6_axis.urdf.xacro" />
+  <xacro:include filename="$(find rocap_ros)/urdf/part/movement/moving_base_6_axis/moving_base_6_axis.urdf.xacro" />
   <xacro:include filename="$(find rocap_ros)/urdf/rocap_body/rocap_body.urdf.xacro"/>
   <xacro:include filename="$(find rocap_ros)/urdf/rocap_base/rocap_base.urdf.xacro"/>
 
@@ -29,7 +29,7 @@
 
                             initial_position_lin_x="-2" 
                             initial_position_lin_y="4.5" 
-                            initial_position_lin_z="2" 
+                            initial_position_lin_z="5" 
                             initial_position_rot_z="${3*pi/4}"
                             
                             lin_x_vel_kp="1000"

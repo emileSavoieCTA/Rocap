@@ -7,7 +7,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
 from geometry_msgs.msg import Twist,PoseStamped,Pose
 
-from nav_msgs.msg import Path, OccupancyGrid
+from nav_msgs.msg import Path, OccupancyGrid, Odometry
 import tf_transformations
 
 from tf2_msgs.msg import TFMessage
@@ -82,9 +82,6 @@ class localPlanner(Node):
         super().__init__('LocalPlanner',parameter_overrides=[rclpy.Parameter('use_sim_time',
                                                                              type_=rclpy.Parameter.Type.BOOL,
                                                                              value=True)])
-
-        self.declare_all_parameters()
-        self.get_all_parameters()
         
         self.pathGrid = self.create_subscription(
             OccupancyGrid,
@@ -107,6 +104,12 @@ class localPlanner(Node):
             'localPlanner/planGoal',
             self.update_target_planning,
             1,callback_group=self.moveSubcriberCb)
+        
+        self.odom = self.create_subscription(
+            Odometry,  
+            '/odom',
+            self.get_z_plane,
+            10)
                 
         self.pathPlanningMutex = RLock()
         self.pathPlanningRunning = False
@@ -126,12 +129,11 @@ class localPlanner(Node):
         
         self.gridMutex = threading.RLock()
 
-    def declare_all_parameters(self):
-        self.declare_parameter('z_plane', 1.5)
 
-    def get_all_parameters(self):
-        self.z_plane = self.get_parameter('z_plane').get_parameter_value().double_value
+    def get_z_plane(self, msg: Odometry):        
+        self.z_plane = msg.pose.pose.position.z
 
+    
     def update_target_move(self,msg:PoseStamped):
         self.get_logger().info("uptate target move")
         self.send_move_async(msg)

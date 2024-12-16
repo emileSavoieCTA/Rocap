@@ -27,7 +27,6 @@ find_package(octomap_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 
@@ -69,13 +68,6 @@ add_executable(planner3D
                node/nav/planner3D.cpp
                node/nav/AStarPlanner.cpp
 )
-
-add_executable(velodyne_fix node/auxilliary/velodyne_fix.cpp)
-
-ament_target_dependencies(velodyne_fix
-        rclcpp
-        sensor_msgs)
-
 target_include_directories(planner3D PUBLIC node/nav/include)
 ament_target_dependencies(planner3D 
 "rclcpp" 
@@ -100,7 +92,6 @@ ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/plugins/env-hooks/gazebo_pl
 #Install cpp executable
 install(TARGETS
         planner3D
-        velodyne_fix
         DESTINATION lib/${PROJECT_NAME})
 
 ## Install Python Node

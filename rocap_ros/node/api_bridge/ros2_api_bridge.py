@@ -418,6 +418,8 @@ class RocapAPI(API):
                 return False
 
     def get_state(self) -> StateResponse | None:
+        # TODO
+        # Add check for API velocity
         request = StateQuery(faults=True,
                              orientation=True,
                              state=True,

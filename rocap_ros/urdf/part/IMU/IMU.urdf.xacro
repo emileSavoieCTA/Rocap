@@ -1,0 +1,104 @@
+<?xml version='1.0'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="IMU">
+
+  <xacro:macro name="IMU" params="name 
+                                  fix_to 
+                                  xyz 
+                                  rpy
+                                  namespace=imu
+                                  topic=data_raw
+                                  hz=50
+                                  angular_noise_std=${2e-4}
+                                  linear_noise_std=${1.7e-2}
+                                  ">
+
+    <!--    define link  -->
+    <link name="${name}_link">
+        
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.00035"/>
+            <inertia
+            ixx="1"
+            ixy="0"
+            ixz="0"
+            iyy="1"
+            iyz="0"
+            izz="1"/>
+        </inertial>
+
+    </link>
+
+    <joint name="${name}_joint" type="fixed">
+        <parent link="${fix_to}"/>
+        <child link="${name}_link"/>
+        <origin rpy="${rpy}" xyz="${xyz}"/>
+        <axis xyz="1 0 0" />
+    </joint>
+
+    <gazebo reference="${name}_joint">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+    <gazebo reference="${name}_link">
+
+        <sensor name="${name}" type="imu">
+            <always_on>true</always_on>
+            <update_rate>${hz}</update_rate>
+            <imu>
+                <angular_velocity>
+                    <x>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>${angular_noise_std}</stddev>
+                    </noise>
+                    </x>
+                    <y>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>${angular_noise_std}</stddev>
+                    </noise>
+                    </y>
+                    <z>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>${angular_noise_std}</stddev>
+                    </noise>
+                    </z>
+                </angular_velocity>
+                <linear_acceleration>
+                    <x>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>${linear_noise_std}</stddev>
+                    </noise>
+                    </x>
+                    <y>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>${linear_noise_std}</stddev>
+                    </noise>
+                    </y>
+                    <z>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>${linear_noise_std}</stddev>
+                    </noise>
+                    </z>
+                </linear_acceleration>
+            </imu>
+
+            <plugin name="bytes_imu" filename="libgazebo_ros_imu_sensor.so">
+                <ros>
+                    <namespace>${namespace}</namespace>
+                    <remapping>~/out:=${topic}</remapping>
+                </ros>
+                <initial_orientation_as_reference>false</initial_orientation_as_reference>
+            </plugin>
+
+        </sensor>
+    </gazebo>
+    
+  </xacro:macro>
+  
+</robot>

@@ -1,0 +1,119 @@
+<?xml version="1.0" ?>
+<robot name="lidar3D"  xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<xacro:property name="nullPose" value="0 0 0" />
+<xacro:macro name="lidar3D" params="
+                                    name=lidar
+                                    topic=point
+                                    lidar_optical_link_name 
+                                    namespace=/ray 
+                                    meshPath=${None}
+                                    meshScale=1
+                                    baseToOpticalXYZ=${nullPose}
+                                    fixToBaseXYZ=${nullPose}
+                                    fixToBaseRPY=${nullPose}
+                                    fixTo=base_link
+                                    noise=0
+                                    horizontal_min_angle=0
+                                    horizontal_max_angle=${2*pi}
+                                    horizontal_samples=300
+                                    vertical_min_angle=-${pi/4}
+                                    vertical_max_angle=${pi/4}
+                                    vertical_samples=100
+                                    range_min=0.05
+                                    range_max=50.0
+                                    hz=10.0"                     
+                                    >
+
+    <xacro:property name="lidar_base_link" value="${name}_base_link" />
+    <xacro:property name="lidar_optical_link" value="${lidar_optical_link_name}" />
+    
+
+    <link name="${lidar_base_link}">
+        <visual>
+            
+            <xacro:if value="${meshPath != None}">
+                <geometry>
+                    <mesh filename="${meshPath}" scale="${meshScale} ${meshScale} ${meshScale}"/>
+                </geometry>
+            </xacro:if>
+            <xacro:unless value="${meshPath != None}">
+
+                <!-- set defaut visual to velodyne puck -->
+                <geometry>
+                    <cylinder radius="0.09" length="0.072"/>
+                    <axis xyz="0 0 1"/>
+                </geometry>
+                <origin xyz="0 0 ${0.072/2}"/>
+
+            </xacro:unless>
+
+        </visual>
+
+    </link>
+
+    <link name="${lidar_optical_link}"/>
+
+    <joint name="${fixTo}_to_${lidar_base_link}" type="fixed">
+        <origin rpy="${fixToBaseRPY}" xyz="${fixToBaseXYZ}"/>
+        <parent link="${fixTo}"/>
+        <child link="${lidar_base_link}"/>
+    </joint>
+
+    <joint name="${lidar_base_link}_to_${lidar_optical_link}" type="fixed">
+        <origin rpy="0 0 0" xyz="${baseToOpticalXYZ}"/>
+        <parent link="${lidar_base_link}"/>
+        <child link="${lidar_optical_link}"/>
+    </joint>
+
+
+  <gazebo reference="${lidar_optical_link}">
+    
+
+    <sensor name="sensor_ray" type="gpu_ray">
+        <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+        <ray>
+            <scan>
+                <horizontal>
+                    <samples>${horizontal_samples}</samples>
+                    <resolution>1.0</resolution>
+                    <min_angle>${horizontal_min_angle}</min_angle>
+                    <max_angle>${horizontal_max_angle}</max_angle>
+                </horizontal>
+                <vertical>
+                    <samples>${vertical_samples}</samples>
+                    <resolution>1.0</resolution>
+                    <min_angle>${vertical_min_angle}</min_angle>
+                    <max_angle>${vertical_max_angle}</max_angle>
+                </vertical>
+            </scan>
+            <range>
+                <min>${range_min}</min>
+                <max>${range_max}</max>
+            </range>
+        </ray>
+        <!-- <always_on>true</always_on> -->
+        <update_rate>${hz}</update_rate>
+        <!-- Setup ros plugin -->
+        <plugin name="lidar_plugin" filename="libgazebo_ros_ray_sensor.so">
+            <gaussian_noise>${noise}</gaussian_noise>
+            <alwaysOn>true</alwaysOn>
+            <!-- <update_rate>10.0</update_rate> -->
+            <ros>
+              <!-- Configure namespace and remap to publish -->
+              <namespace>${namespace}</namespace>
+              <remapping>~/out:=${topic}</remapping>
+            </ros>
+            
+            <output_type>sensor_msgs/PointCloud2</output_type>
+            <!-- <output_type>sensor_msgs/LaserScan</output_type> -->
+            <frame_name>${lidar_optical_link}</frame_name>
+        </plugin>
+   
+    </sensor>
+
+  </gazebo>
+
+</xacro:macro>
+
+</robot>

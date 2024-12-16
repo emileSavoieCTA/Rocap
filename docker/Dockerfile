@@ -9,13 +9,13 @@ ARG USER_GID=$USER_UID
 
 # Install the required ROS packages
 RUN apt-get update && apt-get install -q -y --no-install-recommends \
-  ssh \
-  curl \
-  git \
-  pipx \
-  python3-pip \
-  xterm \
-  tmux
+ ssh \
+ curl \
+ git \
+ pipx \
+ python3-pip \
+ xterm \
+ tmux
 
 WORKDIR ${WORKSPACE}
 
@@ -31,17 +31,17 @@ RUN sudo curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
 
 RUN apt-get update && apt-get install -y \
-  gazebo \
-  ros-${ROS_DISTRO}-gazebo-ros-pkgs
+gazebo \
+ros-${ROS_DISTRO}-gazebo-ros-pkgs
 
 RUN apt-get update && apt-get install -y \
-  ros-${ROS_DISTRO}-rtabmap-ros \
-  ros-${ROS_DISTRO}-ros2-control \
-  ros-${ROS_DISTRO}-gazebo-ros2-control \
-  ros-${ROS_DISTRO}-ros2-controllers \
-  ros-${ROS_DISTRO}-octomap \
-  ros-${ROS_DISTRO}-tf-transformations \
-  python3-transforms3d
+ros-${ROS_DISTRO}-rtabmap-ros \
+ros-${ROS_DISTRO}-ros2-control \
+ros-${ROS_DISTRO}-gazebo-ros2-control \
+ros-${ROS_DISTRO}-ros2-controllers \
+ros-${ROS_DISTRO}-octomap \
+ros-${ROS_DISTRO}-tf-transformations \
+python3-transforms3d
 
 RUN rm -rf /var/lib/apt/lists/*
 

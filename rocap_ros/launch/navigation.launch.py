@@ -82,9 +82,9 @@ def generate_launch_description():
         'log_level', default_value='info',
         description='log level')
     
-    declare_z_plane = DeclareLaunchArgument(
-        'z_plane', default_value='1.5'
-        ,description=' rocap altitude')
+    # declare_z_plane = DeclareLaunchArgument(
+        # 'z_plane', default_value='1.5'
+        # ,description=' rocap altitude')
 
     load_nodes = GroupAction(
         actions=[
@@ -171,8 +171,8 @@ def generate_launch_description():
                 package='rocap_ros',
                 executable='localPlanner.py',
                 name='local_planner',
-                parameters=[{'use_sim_time': use_sim_time,
-                             'z_plane':LaunchConfiguration('z_plane')}]
+                parameters=[{'use_sim_time': use_sim_time}]
+                            #  'z_plane':LaunchConfiguration('z_plane')}]
             ),
             Node(
                 package='rviz2',
@@ -196,7 +196,7 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(declare_z_plane)
+    # ld.add_action(declare_z_plane)
     # Add the actions to launch all of the navigation nodes
     ld.add_action(load_nodes)
 

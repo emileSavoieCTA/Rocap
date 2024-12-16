@@ -4,13 +4,19 @@
 	<!-- define model -->
 	<link name="world"/>
 	<link name="base_link">
+		<inertial>
+			<mass value="40"/>
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+		</inertial>
+	</link>
+	<link name="rocap_body">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/RoCaP_centre_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/RoCaP_centre_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
-			<mass value="40"/>
+			<mass value="0.001"/>
 			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
 		</inertial>
 		<collision>
@@ -20,16 +26,24 @@
 			<origin rpy="0 0 0" xyz="0 0 0.23"/>
 		</collision>
 	</link>
-	<link name="front_rotation_link"/>
-	<joint name="base_link_to_front_rotation_link" type="fixed">
-		<origin rpy="0 0 0.0" xyz="0 0 0"/>
+	<joint name="rocap_body_j" type="fixed">
+		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="base_link"/>
+		<child link="rocap_body"/>
+	</joint>
+	<gazebo reference="rocap_body_j">
+		<preserveFixedJoint>true</preserveFixedJoint>
+	</gazebo>
+	<link name="front_rotation_link"/>
+	<joint name="rocap_body_to_front_rotation_link" type="fixed">
+		<origin rpy="0 0 0.0" xyz="0 0 0"/>
+		<parent link="rocap_body"/>
 		<child link="front_rotation_link"/>
 	</joint>
 	<link name="front_long_arm_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -66,7 +80,7 @@
 	<link name="front_short_arm_1_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -105,7 +119,7 @@
 	<link name="front_short_arm_2_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -142,15 +156,15 @@
 		<preserveFixedJoint>true</preserveFixedJoint>
 	</gazebo>
 	<link name="left_rotation_link"/>
-	<joint name="base_link_to_left_rotation_link" type="fixed">
+	<joint name="rocap_body_to_left_rotation_link" type="fixed">
 		<origin rpy="0 0 1.5707963267948966" xyz="0 0 0"/>
-		<parent link="base_link"/>
+		<parent link="rocap_body"/>
 		<child link="left_rotation_link"/>
 	</joint>
 	<link name="left_long_arm_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -187,7 +201,7 @@
 	<link name="left_short_arm_1_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -226,7 +240,7 @@
 	<link name="left_short_arm_2_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -263,15 +277,15 @@
 		<preserveFixedJoint>true</preserveFixedJoint>
 	</gazebo>
 	<link name="back_rotation_link"/>
-	<joint name="base_link_to_back_rotation_link" type="fixed">
+	<joint name="rocap_body_to_back_rotation_link" type="fixed">
 		<origin rpy="0 0 3.141592653589793" xyz="0 0 0"/>
-		<parent link="base_link"/>
+		<parent link="rocap_body"/>
 		<child link="back_rotation_link"/>
 	</joint>
 	<link name="back_long_arm_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -308,7 +322,7 @@
 	<link name="back_short_arm_1_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -347,7 +361,7 @@
 	<link name="back_short_arm_2_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -384,15 +398,15 @@
 		<preserveFixedJoint>true</preserveFixedJoint>
 	</gazebo>
 	<link name="right_rotation_link"/>
-	<joint name="base_link_to_right_rotation_link" type="fixed">
+	<joint name="rocap_body_to_right_rotation_link" type="fixed">
 		<origin rpy="0 0 4.71238898038469" xyz="0 0 0"/>
-		<parent link="base_link"/>
+		<parent link="rocap_body"/>
 		<child link="right_rotation_link"/>
 	</joint>
 	<link name="right_long_arm_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_long_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -429,7 +443,7 @@
 	<link name="right_short_arm_1_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -468,7 +482,7 @@
 	<link name="right_short_arm_2_arm">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_body/mesh/Bras_court_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -515,9 +529,9 @@
 		</visual>
 	</link>
 	<link name="velodyne"/>
-	<joint name="base_link_to_lidar_base_link" type="fixed">
+	<joint name="rocap_body_to_lidar_base_link" type="fixed">
 		<origin rpy="3.141592653589793 0 0" xyz="-.15 -0.150 0"/>
-		<parent link="base_link"/>
+		<parent link="rocap_body"/>
 		<child link="lidar_base_link"/>
 	</joint>
 	<joint name="lidar_base_link_to_velodyne" type="fixed">
@@ -558,7 +572,7 @@
 				<ros>
 					<!-- Configure namespace and remap to publish -->
 					<namespace>/ray</namespace>
-					<remapping>~/out:=points</remapping>
+					<remapping>~/out:=point</remapping>
 				</ros>
 				<output_type>sensor_msgs/PointCloud2</output_type>
 				<!-- <output_type>sensor_msgs/LaserScan</output_type> -->
@@ -728,7 +742,7 @@
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="world"/>
 		<child link="lin_x_lin"/>
-		<limit effort="1000" lower="-10000" upper="10000" velocity="0.5"/>
+		<limit effort="1000" lower="-10000" upper="10000" velocity="30"/>
 		<dynamics damping="1.0" friction="0.0"/>
 	</joint>
 	<gazebo reference="lin_x">
@@ -740,23 +754,26 @@
 			<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 		</hardware>
 		<joint name="lin_x">
-			<param name="vel_kp">1000</param>
-			<param name="vel_ki">1</param>
-			<param name="vel_kd">0</param>
+			<param name="vel_kp">100</param>
+			<param name="vel_ki">1000</param>
+			<param name="vel_kd">2</param>
 			<param name="vel_max_integral_error">10000</param>
 			<param name="pos_kp">1000</param>
 			<param name="pos_ki">10</param>
 			<param name="pos_kd">500</param>
 			<param name="pos_max_integral_error">10000</param>
 			<!-- define command interface -->
-			<command_interface name="velocity_pid"/>
-			<command_interface name="position_pid"/>
+			<command_interface name="velocity_pid">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
+			<command_interface name="position_pid">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
 			<!-- define state interface -->
 			<state_interface name="position">
 				<param name="initial_value">-2</param>
-			</state_interface>
-			<state_interface name="velocity">
-				<param name="initial_value">0</param>
 			</state_interface>
 			<state_interface name="velocity"/>
 			<state_interface name="effort"/>
@@ -773,7 +790,7 @@
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="lin_x_lin"/>
 		<child link="lin_y_lin"/>
-		<limit effort="1000" lower="-10000" upper="10000" velocity="0.5"/>
+		<limit effort="1000" lower="-10000" upper="10000" velocity="30"/>
 		<dynamics damping="1.0" friction="0.0"/>
 	</joint>
 	<gazebo reference="lin_y">
@@ -785,23 +802,26 @@
 			<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 		</hardware>
 		<joint name="lin_y">
-			<param name="vel_kp">1000</param>
-			<param name="vel_ki">1</param>
-			<param name="vel_kd">0</param>
+			<param name="vel_kp">100</param>
+			<param name="vel_ki">1000</param>
+			<param name="vel_kd">2</param>
 			<param name="vel_max_integral_error">10000</param>
 			<param name="pos_kp">1000</param>
 			<param name="pos_ki">10</param>
 			<param name="pos_kd">500</param>
 			<param name="pos_max_integral_error">10000</param>
 			<!-- define command interface -->
-			<command_interface name="velocity_pid"/>
-			<command_interface name="position_pid"/>
+			<command_interface name="velocity_pid">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
+			<command_interface name="position_pid">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
 			<!-- define state interface -->
 			<state_interface name="position">
 				<param name="initial_value">4.5</param>
-			</state_interface>
-			<state_interface name="velocity">
-				<param name="initial_value">0</param>
 			</state_interface>
 			<state_interface name="velocity"/>
 			<state_interface name="effort"/>
@@ -818,7 +838,7 @@
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="lin_y_lin"/>
 		<child link="lin_z_lin"/>
-		<limit effort="1000" lower="-10000" upper="10000" velocity="0.5"/>
+		<limit effort="1000" lower="-10000" upper="10000" velocity="30"/>
 		<dynamics damping="1.0" friction="0.0"/>
 	</joint>
 	<gazebo reference="lin_z">
@@ -830,23 +850,26 @@
 			<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 		</hardware>
 		<joint name="lin_z">
-			<param name="vel_kp">1000</param>
+			<param name="vel_kp">100</param>
 			<param name="vel_ki">1000</param>
-			<param name="vel_kd">50</param>
-			<param name="vel_max_integral_error">100000</param>
+			<param name="vel_kd">2</param>
+			<param name="vel_max_integral_error">10000</param>
 			<param name="pos_kp">1000</param>
 			<param name="pos_ki">10</param>
 			<param name="pos_kd">500</param>
 			<param name="pos_max_integral_error">10000</param>
 			<!-- define command interface -->
-			<command_interface name="velocity_pid"/>
-			<command_interface name="position_pid"/>
+			<command_interface name="velocity_pid">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
+			<command_interface name="position_pid">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
 			<!-- define state interface -->
 			<state_interface name="position">
 				<param name="initial_value">2</param>
-			</state_interface>
-			<state_interface name="velocity">
-				<param name="initial_value">0</param>
 			</state_interface>
 			<state_interface name="velocity"/>
 			<state_interface name="effort"/>
@@ -863,7 +886,7 @@
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="lin_z_lin"/>
 		<child link="rot_x_rot"/>
-		<limit effort="10000.0" lower="10000" upper="10000" velocity="0.5"/>
+		<limit effort="1000000000000000.0" lower="10000" upper="10000" velocity="30"/>
 		<dynamics damping="1.0" friction="0.0"/>
 	</joint>
 	<gazebo reference="rot_x">
@@ -875,17 +898,16 @@
 			<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 		</hardware>
 		<joint name="rot_x">
-			<param name="vel_kp">100</param>
-			<param name="vel_ki">1000</param>
-			<param name="vel_kd">2</param>
-			<param name="vel_max_integral_error">10000</param>
-			<param name="pos_kp">1000</param>
-			<param name="pos_ki">10</param>
-			<param name="pos_kd">500</param>
-			<param name="pos_max_integral_error">10000</param>
 			<!-- define command interface -->
-			<command_interface name="velocity_pid"/>
-			<command_interface name="position_pid"/>
+			<command_interface name="velocity">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
+			<!-- define command interface -->
+			<command_interface name="position">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
 			<!-- define state interface -->
 			<state_interface name="position">
 				<param name="initial_value">0</param>
@@ -905,7 +927,7 @@
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="rot_x_rot"/>
 		<child link="rot_y_rot"/>
-		<limit effort="10000.0" lower="10000" upper="10000" velocity="0.5"/>
+		<limit effort="1000000000000000.0" lower="10000" upper="10000" velocity="30"/>
 		<dynamics damping="1.0" friction="0.0"/>
 	</joint>
 	<gazebo reference="rot_y">
@@ -917,17 +939,16 @@
 			<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 		</hardware>
 		<joint name="rot_y">
-			<param name="vel_kp">100</param>
-			<param name="vel_ki">1000</param>
-			<param name="vel_kd">2</param>
-			<param name="vel_max_integral_error">10000</param>
-			<param name="pos_kp">1000</param>
-			<param name="pos_ki">10</param>
-			<param name="pos_kd">500</param>
-			<param name="pos_max_integral_error">10000</param>
 			<!-- define command interface -->
-			<command_interface name="velocity_pid"/>
-			<command_interface name="position_pid"/>
+			<command_interface name="velocity">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
+			<!-- define command interface -->
+			<command_interface name="position">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
 			<!-- define state interface -->
 			<state_interface name="position">
 				<param name="initial_value">0</param>
@@ -947,7 +968,7 @@
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<parent link="rot_y_rot"/>
 		<child link="rot_z_rot"/>
-		<limit effort="10000.0" lower="10000" upper="10000" velocity="0.5"/>
+		<limit effort="1000000000000000.0" lower="10000" upper="10000" velocity="30"/>
 		<dynamics damping="1.0" friction="0.0"/>
 	</joint>
 	<gazebo reference="rot_z">
@@ -959,17 +980,16 @@
 			<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 		</hardware>
 		<joint name="rot_z">
-			<param name="vel_kp">100</param>
-			<param name="vel_ki">1000</param>
-			<param name="vel_kd">2</param>
-			<param name="vel_max_integral_error">10000</param>
-			<param name="pos_kp">1000</param>
-			<param name="pos_ki">10</param>
-			<param name="pos_kd">500</param>
-			<param name="pos_max_integral_error">10000</param>
 			<!-- define command interface -->
-			<command_interface name="velocity_pid"/>
-			<command_interface name="position_pid"/>
+			<command_interface name="velocity">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
+			<!-- define command interface -->
+			<command_interface name="position">
+				<param name="min">0</param>
+				<param name="max">2</param>
+			</command_interface>
 			<!-- define state interface -->
 			<state_interface name="position">
 				<param name="initial_value">2.356194490192345</param>
@@ -983,9 +1003,6 @@
 		<parent link="rot_z_rot"/>
 		<child link="base_link"/>
 	</joint>
-	<gazebo reference="rotation_z_rot_to_base_link">
-		<preserveFixedJoint>true</preserveFixedJoint>
-	</gazebo>
 	<link name="base_D_link">
 		<inertial>
 			<mass value="40"/>
@@ -1023,7 +1040,7 @@
 	<link name="base_D_ancor_module_right">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1056,7 +1073,7 @@
 	<link name="base_D_ancor_module_center">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1089,7 +1106,7 @@
 	<link name="base_D_ancor_module_left">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1156,7 +1173,7 @@
 	<link name="base_C_ancor_module_right">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1189,7 +1206,7 @@
 	<link name="base_C_ancor_module_center">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1222,7 +1239,7 @@
 	<link name="base_C_ancor_module_left">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1289,7 +1306,7 @@
 	<link name="base_B_ancor_module_right">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1322,7 +1339,7 @@
 	<link name="base_B_ancor_module_center">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1355,7 +1372,7 @@
 	<link name="base_B_ancor_module_left">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1422,7 +1439,7 @@
 	<link name="base_A_ancor_module_right">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1455,7 +1472,7 @@
 	<link name="base_A_ancor_module_center">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1488,7 +1505,7 @@
 	<link name="base_A_ancor_module_left">
 		<visual>
 			<geometry>
-				<mesh filename="file:///home/rocap_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
+				<mesh filename="file:///home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/urdf/rocap_base/mesh/Cable_module_exterieur_simple.stl" scale="0.001 0.001 0.001"/>
 			</geometry>
 		</visual>
 		<inertial>
@@ -1521,7 +1538,7 @@
 	<!-- define plugin -->
 	<gazebo>
 		<plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-			<parameters>/home/rocap_ws/install/rocap_ros/share/rocap_ros/config/controller_velocity.yaml</parameters>
+			<parameters>/home/oli/ros2_ws/install/rocap_ros/share/rocap_ros/config/controller_position.yaml</parameters>
 			<robot_param_node>sim_description</robot_param_node>
 		</plugin>
 	</gazebo>

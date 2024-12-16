@@ -185,10 +185,10 @@
     <xacro:all_side_arm name="right" fix_to_link="base_link" angleZ="${pi/2*3}" fixed_arm="${fixed_arm}" />
 
     <!-- add sensor -->
-    <xacro:include filename="$(find cta_gazebo_part)/part/movement/moving_base_6_axis/moving_base_6_axis.urdf.xacro" />
-    <xacro:include filename="$(find cta_gazebo_part)/part/lidar/velodyme_puck/velodyme_puck.urdf.xacro" />
-    <xacro:include filename="$(find cta_gazebo_part)/part/IMU/IMU.urdf.xacro" />
-    <xacro:include filename="$(find cta_gazebo_part)/part/camera/cameraDepth/cameraDepth.urdf.xacro" />
+    <xacro:include filename="$(find rocap_ros)/urdf/part/movement/moving_base_6_axis/moving_base_6_axis.urdf.xacro" />
+    <xacro:include filename="$(find rocap_ros)/urdf/part/lidar/velodyme_puck/velodyme_puck.urdf.xacro" />
+    <xacro:include filename="$(find rocap_ros)/urdf/part/IMU/IMU.urdf.xacro" />
+    <xacro:include filename="$(find rocap_ros)/urdf/part/camera/cameraDepth/cameraDepth.urdf.xacro" />
   
     <xacro:velodyme_puck namespace="/ray" fixTo="base_link" fixToBaseXYZ="-.15 -0.150 0" fixToBaseRPY="${pi} 0 0"/>
     <xacro:IMU name="IMU" fix_to="base_link" xyz="0 0 0" rpy="0 0 0"/>

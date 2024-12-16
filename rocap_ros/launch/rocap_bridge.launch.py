@@ -65,7 +65,7 @@ def generate_launch_description():
             description='use simulation time'),
         DeclareLaunchArgument(
             'base_url',
-            default_value='http://192.168.100.201:5577', #TODO verify if robot change
+            default_value='http://192.168.100.203:5577', #TODO verify if robot change
             description='base URL of Rocap API'),
         DeclareLaunchArgument(
             'use_mock',
