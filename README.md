@@ -13,26 +13,15 @@ This repository is built with [Docker](https://docs.docker.com/?_gl=1*jirhkt*_gc
 For Docker installation instructions, follow the following link:
 - [Docker Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
 
-
-## Setup Repository in Visual Studio Code
-Once Docker installed, make sure the Docker Desktop application remains open for the remainder of the process. You may now open the source code in the VSCode IDE. When selecting the folder, make sure to select the folder where the .devcontainer folder is visible as illustraded in the image bellow. this will allow VSCode to repoen the workspace in a DevContainer
-
-<img src="images/folder_vscode.png" alt="Project Logo" width="500" />
-
-Once opened in VScode, make sure you have the following extensions installed:
-
-<img src="images/docker.png" alt="Project Logo" width="500" />
-<img src="images/dev_container.png" alt="Project Logo" width="500" />
-
-Your VSCode environment is now ready.
+Once Docker is installed, make sure the Docker Desktop application remains open for the remainder of the process. 
 
 ## Setup WSL
 
 To access UI applications from a Dev Container from Windows, certain steps must be followed.
 
-Begin installing the Ubuntu application byt following the link: [Ubuntu installation](https://apps.microsoft.com/detail/9pdxgncfsczv?hl=en-US&gl=US)
+Begin by installing the Ubuntu application by following the link: [Ubuntu installation](https://apps.microsoft.com/detail/9pdxgncfsczv?hl=en-US&gl=US)
 
-This will essentially allow to run a WLS terminal from Windows.Then, open a Command Prompt by typing:
+This will essentially allow to run a WLS terminal from Windows. Then, open a Command Prompt by typing:
 
 ```bash
 Windows Key + "cmd:
@@ -52,25 +41,25 @@ The command should result in the following:
 
 If Ubuntu is not listed as default, run the following
 ```bash
-wsl --set-default ubuntu
+wsl --set-default Ubuntu
 wsl --shutdown
 ```
 TODO: ADD INFO FOR UBUNTU NOT IN LIST
 
-This will open up a wsl terminal from windows. From there, navigate to the docker directory of the Rocap repository. If you run the following command:
+You can then open a Ubuntu temrinal by simply running the following command in your Command Prompt
+
+```bash
+bash
+```
+
+Once this is done, and you have entered the correct terminal, please navigate to the "docker" folder of the provided repository. If you run the following command:
+
 ```bash
 ls
 ```
 You should get this result
 
-```bash
-build.bash
-docker-compose.override.wsl.yml
-docker-compose.override.linux.yml
-docker-compose.yml
-docker-compose.override.windows.yml
-Dockerfile
-```
+<img src="images/docker_folder.png" alt="Project Logo" width="800" />
 
 You can then run the following command to run the dedicated docker compose:
 
@@ -78,40 +67,60 @@ You can then run the following command to run the dedicated docker compose:
 docker-compose -f docker-compose.yml -f docker-compose.override.wsl.yml up
 ```
 
-You can then open then open the workspace folder in VSCode and reopen the workspace in a dev container. Once built, execute the following command in a VSCode terminal
+Once the process is done, you will get the following output:
+
+<img src="images/compose.png" alt="Project Logo" width="500" />
+
+## Setup Repository in Visual Studio Code
+You may now open the source code in the VSCode IDE. When selecting the folder, make sure to select the folder where the .devcontainer folder is visible as illustraded in the image bellow. this will allow VSCode to repoen the workspace in a DevContainer
+
+<img src="images/folder_vscode.png" alt="Project Logo" width="500" />
+
+Once opened in VScode, make sure you have the following extensions installed:
+
+<img src="images/docker.png" alt="Project Logo" width="500" />
+<img src="images/dev_container.png" alt="Project Logo" width="500" />
+
+Once these installed, you should be able to reopen the workspace into a Dev Container. This can be done 2 ways.
+
+1. Use the provided VSCode popup upon opening of the workspace
+
+<img src="images/reopen_container.png" alt="Project Logo" width="500" />
+
+2. Open manually
+  - Click on this button on the bottom left of VSCode
+
+  <img src="images/blue_button.png" alt="Project Logo" width="200" />
+
+  - Select the "Reopen in Container option
+
+  <img src="images/select_reopen.png" alt="Project Logo" width="500" />
+
+  The process might take a few minutes on the first build. Once finnished, you should be within a Dev Container with only a file named build.bash. You can then open a new terminal directly from VSCode where you can run the following command to execute the building process:
+
 ```bash
 ./build.bash
 ```
-This will clone the repository and install all necessary dependecies
+This will clone the repository and install all necessary dependecies to the workspace. You are now ready to use the Rocap
 
 # Usage
-Once in a working container, the code is now ready to be used.
+The ROS2 environment for the Rocap has been built to simulate an array of situations. Both using the real Rocap and using the simulation. For information about controlling the Rocap's position, please refer to the [Rocap Control](#known-issues) tab.
 
-## Using the Rocap in simulation
-To launch the Rocap in a Gazebo simulation run the following command in container terminal:
+The rocap uses a single master launch file that can be manipulated by the user dependant on the situation desired. Here are the different configurations:
 
+This will launch the Rocap in a complete simulation environment. Boths its odometry and lidar data will be generated by the simulation.
 ```bash
 ros2 launch rocap_ros rocap.launch.py
 ```
-This will launch all necessary nodes to operate the Rocap in its simulation environment. The process should yield the following result after a couple of seconds (up to 30s):
+This will launch the API bridge and the necessary drivers for the lidar integration.
+```bash
+ros2 launch rocap_ros rocap.launch.py sim:=false velodyne:=true
+```
+*Other configurations are possible but have not been tested.
 
 <img src="images/Rocap_sim.png" alt="Project Logo" width="500" />
 
-If it does not, please refer to the [Know Issues](#known-issues) tab for more information.
-
-
-
-## Using the real Rocap
-Before using the real Rocap, ensure you have completed the following steps:
-1. Request a signed_permissions.json file from the Rocap administrator.
-2. Place the signed_permissions.json file in the permissions folder.
-3. Determine the IP address and communication port of the Rocap you want to control.
-
-Once you have completed the above steps, you can start the API bridge to control the Rocap through ROS using the following command:
-
-```bash
-ros2 launch rocap_ros rocap_bridge base_url:='http://<rocapIP>:<rocapPort>'
-```
+If you encounter any issues, refer to the [Know Issues](#known-issues) tab for more information.
 
 # Contact
 This code was written by the Cégep Édouard-Montpetit under grant 22CTA034
