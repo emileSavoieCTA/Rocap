@@ -1,127 +1,119 @@
-# Table of contents
+# Table of Contents
 
-- [Table of Content](#table-of-content)
+- [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Install Docker](#install-docker)
   - [Recommendations](#recommendations)
+- [Initial Setup](#initial-setup)
+- [Usage](#usage)
+- [Contact](#contact)
+- [Known Issues](#known-issues)
+
+# Introduction
+
+This repository is built with [Docker](https://docs.docker.com/?_gl=1*jirhkt*_gcl_aw*R0NMLjE3Mjk3MTE0OTEuRUFJYUlRb2JDaE1JMVB1ZHRwMmxpUU1WRFU3X0FSMDFfZzVPRUFBWUFTQUFFZ0tsOFBEX0J3RQ..*_gcl_au*MjEwMDM5OTQxNS4xNzI3MTExOTkz*_ga*MzI1MTgxNzg4LjE3MjcxMTA2OTA.*_ga_XJWPQMJYHQ*MTczNDAyOTUzOS4yMy4xLjE3MzQwMjk3ODUuNDcuMC4w) to allow the code to run on a Ubuntu 22.04 image with ROS2 Humble LTS and all necessary dependencies, regardless of the user's operating system.
+
+# Install Docker
+
+## Docker Installation
+
+For Docker installation, follow these instructions:
+- [Docker Windows](https://docs.docker.com/desktop/setup/windows-install/)
+
+Once Docker is installed, ensure the Docker Desktop application remains open throughout the process.
 
 # Initial Setup
 
-## Docker Installation
-This repository is built with [Docker](https://docs.docker.com/?_gl=1*jirhkt*_gcl_aw*R0NMLjE3Mjk3MTE0OTEuRUFJYUlRb2JDaE1JMVB1ZHRwMmxpUU1WRFU3X0FSMDFfZzVPRUFBWUFTQUFFZ0tsOFBEX0J3RQ..*_gcl_au*MjEwMDM5OTQxNS4xNzI3MTExOTkz*_ga*MzI1MTgxNzg4LjE3MjcxMTA2OTA.*_ga_XJWPQMJYHQ*MTczNDAyOTUzOS4yMy4xLjE3MzQwMjk3ODUuNDcuMC4w). This allows the code to run on a Ubuntu 22.04 image with ROS2 Humble LTS and all necessary dependencies regardless of the user's operating system. 
-
-For Docker installation instructions, follow the following link:
-- [Docker Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
-
-Once Docker is installed, make sure the Docker Desktop application remains open for the remainder of the process. 
-
 ## Setup WSL
 
-To access UI applications from a Dev Container from Windows, certain steps must be followed.
+To access UI applications from a Dev Container on Windows, follow these steps:
 
-Begin by installing the Ubuntu application by following the link: [Ubuntu installation](https://apps.microsoft.com/detail/9pdxgncfsczv?hl=en-US&gl=US)
+1. Install the Ubuntu application from the [Microsoft Store](https://apps.microsoft.com/detail/9pdxgncfsczv?hl=en-US&gl=US)
 
-This will essentially allow to run a WLS terminal from Windows. Then, open a Command Prompt by typing:
+2. Open a Command Prompt (Windows Key + "cmd")
 
-```bash
-Windows Key + "cmd:
-```
+    <img src="images/cmd.png" alt="Project Logo" width="1000" />
 
-The following window should open:
+3. Verify Ubuntu installation:
+   ```bash
+   wsl --list
+   ```
+   
+   ![WSL List](images/wsl_list.png)
 
-<img src="images/cmd.png" alt="Project Logo" width="1000" />
+4. If Ubuntu is not the default, set it as default:
+   ```bash
+   wsl --set-default Ubuntu
+   wsl --shutdown
+   ```
 
-Run the following line in the Command Prompt to verify that Ubuntu is correctly installed
-```bash
-wsl --list
-```
-The command should result in the following:
+   > **Note**: If Ubuntu is not in the list, additional configuration may be required.
 
-<img src="images/wsl_list.png" alt="Project Logo" width="500" />
+5. Open Ubuntu terminal:
+   ```bash
+   bash
+   ```
 
-If Ubuntu is not listed as default, run the following
-```bash
-wsl --set-default Ubuntu
-wsl --shutdown
-```
-TODO: ADD INFO FOR UBUNTU NOT IN LIST
+6. Navigate to the "docker" folder and run Docker Compose:
+   ```bash
+   cd /path/to/docker/folder
+   docker-compose -f docker-compose.yml -f docker-compose.override.wsl.yml up
+   ```
 
-You can then open a Ubuntu temrinal by simply running the following command in your Command Prompt
-
-```bash
-bash
-```
-
-Once this is done, and you have entered the correct terminal, please navigate to the "docker" folder of the provided repository. If you run the following command:
-
-```bash
-ls
-```
-You should get this result
-
-<img src="images/docker_folder.png" alt="Project Logo" width="800" />
-
-You can then run the following command to run the dedicated docker compose:
-
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.override.wsl.yml up
-```
-
-Once the process is done, you will get the following output:
-
-<img src="images/compose.png" alt="Project Logo" width="500" />
+   ![Docker Compose](images/compose.png)
 
 ## Setup Repository in Visual Studio Code
-You may now open the source code in the VSCode IDE. When selecting the folder, make sure to select the folder where the .devcontainer folder is visible as illustraded in the image bellow. this will allow VSCode to repoen the workspace in a DevContainer
 
-<img src="images/folder_vscode.png" alt="Project Logo" width="500" />
+1. Open the source code in VSCode, selecting the folder with the `.devcontainer` folder visible:
 
-Once opened in VScode, make sure you have the following extensions installed:
+   ![VSCode Folder](images/folder_vscode.png)
 
-<img src="images/docker.png" alt="Project Logo" width="500" />
-<img src="images/dev_container.png" alt="Project Logo" width="500" />
+2. Install required extensions:
+   
+   ![Docker Extension](images/docker.png)
+   ![Dev Container Extension](images/dev_container.png)
 
-Once these installed, you should be able to reopen the workspace into a Dev Container. This can be done 2 ways.
+3. Reopen the workspace in a Dev Container:
+   - Use the popup upon opening
+   
+     ![Reopen Container Popup](images/reopen_container.png)
 
-1. Use the provided VSCode popup upon opening of the workspace
+   - Or manually:
+     - Click the blue button in the bottom left
+     
+       ![Blue Button](images/blue_button.png)
+     
+     - Select "Reopen in Container"
+     
+       ![Select Reopen](images/select_reopen.png)
 
-<img src="images/reopen_container.png" alt="Project Logo" width="500" />
-
-2. Open manually
-  - Click on this button on the bottom left of VSCode
-
-  <img src="images/blue_button.png" alt="Project Logo" width="200" />
-
-  - Select the "Reopen in Container option
-
-  <img src="images/select_reopen.png" alt="Project Logo" width="500" />
-
-  The process might take a few minutes on the first build. Once finnished, you should be within a Dev Container with only a file named build.bash. You can then open a new terminal directly from VSCode where you can run the following command to execute the building process:
-
-```bash
-./build.bash
-```
-This will clone the repository and install all necessary dependecies to the workspace. You are now ready to use the Rocap
+4. Once in the Dev Container, run the build script:
+   ```bash
+   ./build.bash
+   ```
 
 # Usage
-The ROS2 environment for the Rocap has been built to simulate an array of situations. Both using the real Rocap and using the simulation. For information about controlling the Rocap's position, please refer to the [Rocap Control](#known-issues) tab.
 
-The rocap uses a single master launch file that can be manipulated by the user dependant on the situation desired. Here are the different configurations:
+The ROS2 environment for the Rocap supports multiple simulation configurations:
 
-This will launch the Rocap in a complete simulation environment. Boths its odometry and lidar data will be generated by the simulation.
-```bash
-ros2 launch rocap_ros rocap.launch.py
-```
-This will launch the API bridge and the necessary drivers for the lidar integration.
-```bash
-ros2 launch rocap_ros rocap.launch.py sim:=false velodyne:=true
-```
-*Other configurations are possible but have not been tested.
+1. Complete simulation (odometry and lidar simulated):
+   ```bash
+   ros2 launch rocap_ros rocap.launch.py
+   ```
 
-<img src="images/Rocap_sim.png" alt="Project Logo" width="500" />
+2. API bridge with Lidar integration:
+   ```bash
+   ros2 launch rocap_ros rocap.launch.py sim:=false velodyne:=true
+   ```
 
-If you encounter any issues, refer to the [Know Issues](#known-issues) tab for more information.
+   ![Rocap Simulation](images/Rocap_sim.png)
+
+> **Note**: Other configurations are possible but may require additional testing.
+
+# Known Issues
+
+[Placeholder for known issues section]
 
 # Contact
-This code was written by the Cégep Édouard-Montpetit under grant 22CTA034
 
+This code was developed by the Cégep Édouard-Montpetit under grant 22CTA034.
